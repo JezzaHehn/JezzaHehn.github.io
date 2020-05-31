@@ -1,0 +1,30 @@
+# Setup
+title:               'Jezza Hehn'
+tagline:             'Fractal Artist and Management Consultant'
+description:         'Portfolio page of Jezza Hehn'
+url:                 http://jezzahehn.github.io
+baseurl:             ''
+paginate:            5
+permalink:           pretty
+
+# About/contact
+author:
+  name:              Jezza Hehn
+  url:               https://jezza.net
+  email:             contact@jezza.net
+  tel:				 +1-347-855-4554
+
+# Gems
+plugins:
+  - jekyll-paginate
+
+# Custom vars
+version:             0.1
+google_analytics_id: #UA-XXXX-Y
+
+# Sets front matter for all images
+defaults:
+  - scope:
+      path: "assets/img"
+    values:
+      image: true
