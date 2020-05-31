@@ -2,8 +2,8 @@
 title:               'Jezza Hehn'
 tagline:             'Fractal Artist and Management Consultant'
 description:         'Portfolio page of Jezza Hehn'
-url:                 http://JezzaHehn.github.io
-baseurl:             ''
+url:                 http://jezzahehn.github.io
+baseurl:             '/'
 paginate:            5
 permalink:           pretty
 
@@ -20,7 +20,6 @@ plugins:
 
 # Custom vars
 version:             0.1
-google_analytics_id: #UA-XXXX-Y
 
 # Sets front matter for all images
 defaults:
