@@ -24,11 +24,68 @@
       <div class="container content">
         {{ content }}
       </div>
+
     </div>
 
     <label for="sidebar-checkbox" class="sidebar-toggle"></label>
+    <script type="text/javascript" src="{{ site.url }}/public/js/sidebar-toggle.js"></script>
+	
+	<link rel="stylesheet" href="{{ site.url }}/public/css/lightbox.css">
 
-    <script src="{{ site.url }}/public/js/sidebar-toggle.js"></script>
+	<script src="https://code.jquery.com/jquery-1.6.2.min.js"></script>
 
+	<script>
+	  jQuery(document).ready(function($) {
+		  
+		  $('.lightbox-trigger').click(function(e) {
+			  
+			  //prevent default action (hyperlink)
+			  e.preventDefault();
+			  
+			  //Get clicked image src
+			  var image_src = $(this).attr("src");
+			  
+			  /* 	
+			   If the lightbox window HTML already exists in document, 
+			   change the img src to to match the src of whatever image was clicked
+			   
+			   If the lightbox window HTML doesn't exists, create it and insert it.
+			   (This will only happen the first time around)
+			  */
+			  
+			  if ($('#lightbox').length > 0) { // #lightbox exists
+				  
+				  //replace img src value
+				  $('#content').html('<img src="' + image_src + '" />');
+		   		  
+				  //show lightbox window - you could use .show('fast') for a transition
+				  $('#lightbox').show();
+			  }
+			  
+			  else { //#lightbox does not exist - create and insert (runs 1st time only)
+				  
+				  //create HTML markup for lightbox window
+				  var lightbox = 
+					  '<div id="lightbox">' +
+					  '<p>Click anywhere to close</p>' +
+					  '<div id="content">' + 
+					  '<img src="' + image_src +'" />' +
+					  '</div>' +	
+					  '</div>';
+				  
+				  //insert lightbox HTML into page
+				  $('body').append(lightbox);
+			  }
+			  
+		  });
+		  
+		  //Click anywhere on the page to get rid of lightbox window
+		  $('#lightbox').live('click', function() { //must use live, as the lightbox element is inserted into the DOM
+			  $('#lightbox').hide();
+		  });
+
+	  });
+	</script>
+	
   </body>
 </html>
