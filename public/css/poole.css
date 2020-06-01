@@ -49,7 +49,7 @@ body {
 
 html {
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 18px;
+  font-size: 22px;
   line-height: 1.5;
 }
 @media (min-width: 38em) {
@@ -59,8 +59,8 @@ html {
 }
 
 body {
-  color: #515151;
-  background-color: #fff;
+  color: #ddd;
+  background-color: #222;
   -webkit-text-size-adjust: 100%;
       -ms-text-size-adjust: 100%;
 }
@@ -84,7 +84,7 @@ h1, h2, h3, h4, h5, h6 {
   margin-bottom: .5rem;
   font-weight: bold;
   line-height: 1.25;
-  color: #313131;
+  color: #bdb;
   text-rendering: optimizeLegibility;
 }
 h1 {
@@ -110,7 +110,7 @@ p {
 }
 
 strong {
-  color: #303030;
+  color: #dfd;
 }
 
 
@@ -227,11 +227,19 @@ blockquote p:last-child {
   }
 }
 
+/* Images have rounded previews with slight zoom on hover and full zoom on click */
 img {
+  cursor: pointer;
   display: block;
   max-width: 100%;
   margin: 0 0 1rem;
-  border-radius: 5px;
+  border-radius: 15px;
+  transition: 0.3s;
+}
+
+img:hover  {
+	transform: scale(1.05); /* (105% zoom) */
+	box-shadow: 0 10px 20px 0 rgba(0,0,0,0.2), 0 20px 40px 0 rgba(0,0,0,0.19);
 }
 
 /* Tables */
@@ -274,8 +282,8 @@ tbody tr:nth-child(odd) th {
 .message {
   margin-bottom: 1rem;
   padding: 1rem;
-  color: #717171;
-  background-color: #f9f9f9;
+  color: #ccc;
+  background-color: #333;
 }
 
 
