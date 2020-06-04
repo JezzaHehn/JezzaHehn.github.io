@@ -20,11 +20,11 @@
  * Update the foundational and global aspects of the page.
  */
 
-* {
+/* * {
   -webkit-box-sizing: border-box;
      -moz-box-sizing: border-box;
           box-sizing: border-box;
-}
+}*/
 
 /* Prevent scroll on narrow devices */
 html,
@@ -243,7 +243,7 @@ img {
   max-width: 100%;
 }
 
-img:hover  {
+.lightbox-trigger:hover  {
 	transform: scale(1.05); /* (105% zoom) */
 	box-shadow: 0 10px 20px 0 rgba(0,0,0,0.2), 0 20px 40px 0 rgba(0,0,0,0.19);
 }

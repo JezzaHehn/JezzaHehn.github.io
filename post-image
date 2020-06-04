@@ -1,0 +1,37 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]
+  then
+      echo "Please give a filename when calling this script."
+	  exit 1
+fi
+
+imgdir="./assets/img/"
+postdir="./_posts/"
+
+filename=$(basename "$1")
+title="$2"
+
+if [ -z "$title" ]; then
+	echo "Please enter a title for $filename "
+	read title
+fi
+
+name="${filename%.*}"
+outname="$(date +%F)-$name.md"
+
+cat > "$postdir$outname" <<EOF
+---
+layout: post
+title: $title
+image: $filename
+---
+
+![{{ page.title }}](/assets/img/{{ page.image }}){:class="lightbox-trigger"}
+EOF
+
+cp "$1" "$imgdir"
+
+echo "Image copied to assets and markup post written successfully to $outname"
+
+
