@@ -1,7 +1,0 @@
----
-layout: post
-title: Schprung
-image: Schprung.png
----
-
-![{{ page.title }}](/assets/img/{{ page.image }})
