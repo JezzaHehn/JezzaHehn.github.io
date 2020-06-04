@@ -25,6 +25,7 @@
         {{ content }}
       </div>
 
+	<!-- End main content wrap -->
     </div>
 
     <label for="sidebar-checkbox" class="sidebar-toggle"></label>
@@ -41,7 +42,7 @@
 			  e.preventDefault();
 			  
 			  //Get clicked image src
-			  var image_src = $(this).attr("src");
+			  var image_src = $(this).children("img").attr("src");
 			  
 			  /* 	
 			   If the lightbox window HTML already exists in document, 

@@ -243,6 +243,7 @@ img {
   max-width: 100%;
 }
 .lightbox-trigger {
+	overflow: hidden;
 	object-fit: cover;
 	max-width: 100%;
 	max-height: 100%;
@@ -647,11 +648,11 @@ a.pagination-item:hover {
 
 @media (min-width: 30em) {
   .pagination {
-    margin: 3rem 0;
+    margin: 3rem 
   }
   .pagination-item {
     float: left;
-    width: 50%;
+    width: 40%;
   }
   .pagination-item:first-child {
     margin-bottom: 0;

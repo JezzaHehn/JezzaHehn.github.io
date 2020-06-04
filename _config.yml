@@ -4,8 +4,8 @@ tagline:             'Fractal Artist and Management Consultant'
 description:         'Portfolio page of Jezza Hehn'
 url:                 https://jezzahehn.github.io
 baseurl:             '/'
-paginate:            5
-permalink:           pretty
+paginate:            1
+permalink:			 pretty
 
 # About/contact
 author:
@@ -19,7 +19,7 @@ plugins:
   - jekyll-paginate
 
 # Custom vars
-version:             0.1
+version:             0.2
 
 # Sets front matter for all images
 defaults:
