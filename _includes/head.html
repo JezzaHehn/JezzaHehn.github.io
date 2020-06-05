@@ -16,6 +16,11 @@
   <link rel="canonical" href="{{ page.url | absolute_url }}">
   {% endif %}
 
+  {% if site.tags != "" %}
+  {% include collecttags.html %}
+  {% endif %}
+
+
   <link rel="stylesheet" href="{{ '/public/css/syntax.css' | absolute_url }}">
   <link rel="stylesheet" href="{{  '/public/css/main.css'  | absolute_url }}">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Zilla+Slab:400,400italic,700%7CPT+Sans:400">
