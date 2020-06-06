@@ -1,0 +1,93 @@
+#!/bin/bash
+while test $# -gt 0; do
+  case "$1" in
+    -h|--help)
+      echo "post-img: a simple script for posting artwork"
+      echo " "
+      echo "post-img filename title [options]"
+      echo " "
+      echo "options:"
+      echo "-h, --help                show this help"
+      echo "-a, --action=ACTION       specify an action to use"
+      echo "-f, --action=ACTION       specify an action to use"
+      echo "-t, --action=ACTION       Title of the piece"
+      echo "-T, --tags=TAGS           List of software used to create the art"
+      echo "-o, --output-dir=DIR      specify a directory to store output in"
+      exit 0
+      ;;
+    -a)
+      shift
+      if test $# -gt 0; then
+        export PROCESS=$1
+      else
+        echo "no process specified"
+        exit 1
+      fi
+      shift
+      ;;
+    --action*)
+      export PROCESS=`echo $1 | sed -e 's/^[^=]*=//g'`
+      shift
+      ;;
+    -o)
+      shift
+      if test $# -gt 0; then
+        export OUTPUT=$1
+      else
+        echo "no output dir specified"
+        exit 1
+      fi
+      shift
+      ;;
+    --output-dir*)
+      export OUTPUT=`echo $1 | sed -e 's/^[^=]*=//g'`
+      shift
+      ;;
+    *)
+      break
+      ;;
+  esac
+done
+
+
+
+
+
+if [ $# -eq 0 ]
+  then
+      echo "Please give a filename when calling this script."
+	  exit 1
+fi
+
+imgdir="./assets/img/"
+postdir="./_posts/"
+
+filename=$(basename "$1")
+title="$2"
+
+if [ -z "$title" ]; then
+	echo "Please enter a title for $filename "
+	read title
+fi
+
+name="${filename%.*}"
+outname="$(date +%F)-$name.md"
+
+cat > "$postdir$outname" <<EOF
+---
+layout: post
+title: $title
+image: $filename
+tag: apophysis
+---
+
+<span class="lightbox-trigger">
+![{{ page.title }}](/assets/img/{{ page.image }})
+</span>
+EOF
+
+cp "$1" "$imgdir"
+
+echo "Image copied to /assets/img/$filename\nPost written successfully to $outname"
+
+

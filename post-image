@@ -1,37 +1,154 @@
 #!/bin/bash
 
-if [ $# -eq 0 ]
-  then
-      echo "Please give a filename when calling this script."
-	  exit 1
+while test $# -gt 0; do
+	case "$1" in
+		*[\./]*)
+			FILE=$1
+			shift
+			;;
+		-h|--help)
+			echo "post-img: a simple script for posting artwork"
+			echo " "
+			echo "post-img [filename] [options]"
+			echo " "
+			echo "options:"
+			echo "-h, --help                Show this help list and exit"
+			echo "-c, --comment=COMMENT     Comment or description of image"
+			echo '-d, --date=DATE           Date of creation, e.g. "Jan 1", "next Friday"'
+			echo "-f, --file=FILE           Filename of the image"
+			echo "-n, --name=NAME           Title of the image (and the post)"
+			echo "-t, --tags=TAGS           Space-separated list of software tags"
+			exit 0
+			;;
+		-c)
+			shift
+			if test $# -gt 0; then
+				COMMENT=$1
+			else
+				echo "No comment specified"
+				exit 1
+			fi
+			shift
+			;;
+		--comment*)
+			COMMENT=`echo $1 | sed -e 's/^[^=]*=//g'`
+			shift
+			;;
+		-d)
+			shift
+			if test $# -gt 0; then
+				DATE=$(date --date="$1" +%F)
+			else
+				echo 'Please specify a date, e.g. "Jan 1", "next Friday"'
+				exit 1
+			fi
+			shift
+			;;
+		--date*)
+			DATE=`echo $1 | sed -e 's/^[^=]*=//g'`
+			shift
+			;;
+		-f)
+			shift
+			if test $# -gt 0; then
+				FILE=$1
+			else
+				echo "No filename specified"
+				exit 1
+			fi
+			shift
+			;;
+		--file*)
+			FILE=`echo $1 | sed -e 's/^[^=]*=//g'`
+			shift
+			;;
+		-n)
+			shift
+			if test $# -gt 0; then
+				NAME=$1
+			else
+				echo "No title specified"
+				exit 1
+			fi
+			shift
+			;;
+		--name*)
+			PROCESS=`echo $1 | sed -e 's/^[^=]*=//g'`
+			shift
+			;;
+		-t)
+			shift
+			if test $# -gt 0; then
+				TAGS=$1
+			else
+				echo "No tag list specified"
+				exit 1
+			fi
+			shift
+			;;
+		--tags*)
+			PROCESS=`echo $1 | sed -e 's/^[^=]*=//g'`
+			shift
+			;;
+		*)
+			break
+			;;
+	esac
+done
+
+while [ -z "$FILE" ]; do
+	echo "What image file would you like to post? "
+	read FILE
+done
+
+FILENAME=$(basename -- "$FILE")
+
+if [ -z "$NAME" ]; then
+	echo "Please enter a title, or leave blank to use ${FILENAME%.*} - "
+	read NAME
+	if [ -z "$NAME" ]; then
+		NAME="${FILENAME%.*}"
+	fi
+fi
+if [ -z "$COMMENT" ]; then
+	echo "Add a comment about $NAME or leave blank to skip. - "
+	read COMMENT
+fi
+if [ -z "$DATE" ]; then
+	echo "Enter a date, or leave blank to use today's date. - "
+	read DATETEXT
+	DATE=$(date --date="$DATETEXT" +%F)
+	if [ -z "$DATE" ]; then
+		DATE="$(date +%F)"
+	fi
+fi
+if [ -z "$TAGS" ]; then
+	echo "Add a space-separated list of tags, or leave blank for default apophysis tag. - "
+	read TAGS
+	if [ -z "$TAGS" ]; then
+		TAGS="apophysis"
+	fi
 fi
 
-imgdir="./assets/img/"
-postdir="./_posts/"
+IMGDIR="./assets/img/"
+POSTDIR="./_posts/"
+OUTFILE="$DATE-$NAME.md"
 
-filename=$(basename "$1")
-title="$2"
-
-if [ -z "$title" ]; then
-	echo "Please enter a title for $filename "
-	read title
-fi
-
-name="${filename%.*}"
-outname="$(date +%F)-$name.md"
-
-cat > "$postdir$outname" <<EOF
+cat > "$POSTDIR$OUTFILE" <<EOF
 ---
-layout: post
-title: $title
-image: $filename
+layout:		post
+title:		$NAME
+image:		$FILENAME
+comment:	$COMMENT
+tag:		$TAGS
 ---
 
-![{{ page.title }}](/assets/img/{{ page.image }}){:class="lightbox-trigger"}
+<span class="lightbox-trigger">
+![{{ page.title }}](/assets/img/{{ page.image }})
+</span>
 EOF
 
-cp "$1" "$imgdir"
+cp "$FILE" "$IMGDIR"
 
-echo "Image copied to assets and markup post written successfully to $outname"
-
-
+echo "Image copied to /assets/img/$FILENAME"
+echo "Post written successfully to $OUTFILE"
