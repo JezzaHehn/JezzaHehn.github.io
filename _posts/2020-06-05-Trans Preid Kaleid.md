@@ -3,7 +3,7 @@ layout:		post
 title:		Trans Preid Kaleid
 image:		Trans Preid Kaleid.png
 comment:	Created for Gay Wrath Month 2020
-tag:		mirrorlab
+tags:		[mirrorlab]
 ---
 
 <span class="lightbox-trigger">
