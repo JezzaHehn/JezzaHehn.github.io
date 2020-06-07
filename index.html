@@ -10,28 +10,26 @@ title: Welcome
   </p>
 
   <div class="posts">
-    {% for post in paginator.posts %}
-    <div class="post">
-
+	{% for post in paginator.posts %}
+	<div class="post">
 	  <h1 class="post-title">
-        <a href="{{ post.url | absolute_url }}">
+		<a href="{{ post.url | absolute_url }}">
           {{ post.title }}
         </a>
       </h1>
-
 	  <span>
 		[
 		{% for tag in post.tags %}
 		  {% capture tag_name %}{{ tag }}{% endcapture %}
-		  <a href="/tag/{{ tag_name }}"><nobr>{{ tag_name }}</nobr>&nbsp;</a>
+		  <a href="/tag/{{ tag_name }}"><nobr>{{ tag_name }}</nobr></a>
 		{% endfor %}
 		]
 	  </span>
-
 	  <span class="post-date">{{ post.date | date_to_string }}</span>
-  
-      {{ post.content }}
-
+	  {% if post.comment %}
+	    <span class="post-comment">{{ post.comment }}</span><br><br>
+	  {% endif %}
+	  {{ post.content }}
 	</div>
     {% endfor %}
   </div>
