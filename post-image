@@ -3,7 +3,7 @@
 while test $# -gt 0; do
 	case "$1" in
 		*[\./]*)
-			FILE=$1
+			IMGFILE=$1
 			shift
 			;;
 		-h|--help)
@@ -17,7 +17,7 @@ while test $# -gt 0; do
 			echo '-d, --date=DATE           Date of creation, e.g. "Jan 1", "next Friday"'
 			echo "-f, --file=FILE           Filename of the image"
 			echo "-n, --name=NAME           Title of the image (and the post)"
-			echo "-t, --tags=TAGS           Space-separated list of software tags"
+			echo "-t, --tags=TAGS           Comma-separated list of software tags"
 			exit 0
 			;;
 		-c)
@@ -51,7 +51,7 @@ while test $# -gt 0; do
 		-f)
 			shift
 			if test $# -gt 0; then
-				FILE=$1
+				IMGFILE=$1
 			else
 				echo "No filename specified"
 				exit 1
@@ -59,7 +59,7 @@ while test $# -gt 0; do
 			shift
 			;;
 		--file*)
-			FILE=`echo $1 | sed -e 's/^[^=]*=//g'`
+			IMGFILE=`echo $1 | sed -e 's/^[^=]*=//g'`
 			shift
 			;;
 		-n)
@@ -96,12 +96,12 @@ while test $# -gt 0; do
 	esac
 done
 
-while [ -z "$FILE" ]; do
+while [ -z "$IMGFILE" ]; do
 	echo "What image file would you like to post? "
-	read FILE
+	read IMGFILE
 done
 
-FILENAME=$(basename -- "$FILE")
+FILENAME=$(basename -- "$IMGFILE")
 
 if [ -z "$NAME" ]; then
 	echo "Please enter a title, or leave blank to use ${FILENAME%.*} - "
@@ -123,7 +123,7 @@ if [ -z "$DATE" ]; then
 	fi
 fi
 if [ -z "$TAGS" ]; then
-	echo "Add a space-separated list of tags, or leave blank for default apophysis tag. - "
+	echo "Add a comma-separated list of tags, or leave blank for default apophysis tag. - "
 	read TAGS
 	if [ -z "$TAGS" ]; then
 		TAGS="apophysis"
@@ -132,15 +132,20 @@ fi
 
 IMGDIR="./assets/img/"
 POSTDIR="./_posts/"
-OUTFILE="$DATE-$NAME.md"
+POSTFILE="$DATE-$NAME.md"
 
-cat > "$POSTDIR$OUTFILE" <<EOF
+cp "$IMGFILE" "$IMGDIR"
+
+echo " "
+echo "Image copied to /assets/img/$FILENAME"
+
+cat > "$POSTDIR$POSTFILE" <<EOF
 ---
 layout:		post
 title:		$NAME
 image:		$FILENAME
 comment:	$COMMENT
-tag:		$TAGS
+tags:		[$TAGS]
 ---
 
 <span class="lightbox-trigger">
@@ -148,7 +153,9 @@ tag:		$TAGS
 </span>
 EOF
 
-cp "$FILE" "$IMGDIR"
+echo "Post written successfully to $POSTFILE"
 
-echo "Image copied to /assets/img/$FILENAME"
-echo "Post written successfully to $OUTFILE"
+git add $IMGDIR$FILE $POSTDIR$POSTFILE
+git commit -m "Added $NAME"
+
+echo "New files committed to central repository. Posting complete."
