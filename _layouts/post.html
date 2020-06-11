@@ -13,7 +13,12 @@ layout: default
 	]
   </span>
   <span class="post-date">{{ page.date | date_to_string }}</span>
-  <p>{{ page.comment }}</p>
+  {% if page.comment != nil %}
+    <p>{{ page.comment }}</p>
+  {% endif %}
+  {% if page.palette != nil %}
+    <p>Created using <a href="{{ page.palette }}">this color palette</a></p>
+  {% endif %}
   {{ content }}
 </div>
 

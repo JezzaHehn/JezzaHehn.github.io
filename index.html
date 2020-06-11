@@ -5,7 +5,7 @@ title: Welcome
 
 <body class="theme-base-0b layout-reverse sidebar-overlay">
 
-  <p class=message>
+  <p class="message">
 	Welcome! This website is a hub for artwork, old and new. Thank you for your patience as content is migrated from social media.  –  💚 Jez
   </p>
 
@@ -26,8 +26,11 @@ title: Welcome
 		]
 	  </span>
 	  <span class="post-date">{{ post.date | date_to_string }}</span>
-	  {% if post.comment %}
-	    <span class="post-comment">{{ post.comment }}</span><br><br>
+	  {% if post.comment != nil %}
+        <p>{{ post.comment }}</p>
+	  {% endif %}
+	  {% if post.palette != nil %}
+        <p>Created using <a href="{{ post.palette }}" target="_blank">this color palette</a></p>
 	  {% endif %}
 	  {{ post.content }}
 	</div>
