@@ -7,5 +7,5 @@ tags:		[apophysis, gimp]
 ---
 
 <span class="lightbox-trigger">
-![{{ page.title }}](/assets/img/{{ page.image }})
+![{{ page.title }}](/assets/img/{{ page.image }}){:class="lightbox-trigger"}
 </span>
