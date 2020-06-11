@@ -572,11 +572,22 @@ a.sidebar-nav-item:focus {
  * Posts and pages
  *
  * Each post is wrapped in `.post` and is used on default and post layouts. Each
- * page is wrapped in `.page` and is only used on the page layout.
+ * page is wrapped in `.page` and is only used on the page layout. One the default
+ * layout, the posts are wrapped in `.posts` for columns depending on screen size.
  */
 
 .posts {
-	column-count: 3;
+	column-count: 1;
+}
+@media only screen and (min-width: 900px) {
+	.posts {
+		column-count: 2;
+	}
+}
+@media only screen and (min-width: 1200px) {
+	.posts {
+		column-count: 3;
+	}
 }
 .post {
 	break-inside: avoid-column;
