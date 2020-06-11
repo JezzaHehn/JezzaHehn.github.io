@@ -36,18 +36,24 @@ title: Welcome
   
   <div class="pagination">
     {% if paginator.next_page %}
-      <a class="pagination-item older" href="{{ paginator.next_page_path | absolute_url }}"><strong>Older</strong></a>
+      <a class="pagination-item older" href="{{ paginator.next_page_path | absolute_url }}">
+		<img class="pagination-arrow" src="/assets/left.svg" alt="Older">
+	  </a>
     {% else %}
-      <span class="pagination-item older">Older</span>
+      <span class="pagination-item older"><img class="pagination-arrow" src="/assets/left.svg" alt="Older"></span>
     {% endif %}
     {% if paginator.previous_page %}
       {% if paginator.page == 2 %}
-        <a class="pagination-item newer" href="{{ '/' | absolute_url }}"><strong>Newer</strong></a>
+        <a class="pagination-item newer" href="{{ '/' | absolute_url }}">
+		  <img class="pagination-arrow" src="/assets/right.svg" alt="Newer">
+		</a>
       {% else %}
-        <a class="pagination-item newer" href="{{ paginator.previous_page_path | absolute_url }}"><strong>Newer</strong></a>
+        <a class="pagination-item newer" href="{{ paginator.previous_page_path | absolute_url }}">
+		  <img class="pagination-arrow" src="/assets/right.svg" alt="Newer">
+		</a>
       {% endif %}
     {% else %}
-      <span class="pagination-item newer">Newer</span>
+      <span class="pagination-item newer"><img class="pagination-arrow" src="/assets/right.svg" alt="Newer"></span>
     {% endif %}
   </div>
   

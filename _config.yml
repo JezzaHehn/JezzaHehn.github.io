@@ -4,7 +4,7 @@ tagline:             'Fractal Artist and Management Consultant'
 description:         'Portfolio page of Jezza Hehn'
 url:                 https://jezzahehn.github.io
 baseurl:             '/'
-paginate:            5
+paginate:            6
 permalink:			 pretty
 
 # About/contact

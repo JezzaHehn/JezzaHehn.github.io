@@ -109,13 +109,13 @@ strong {
  * Wrapper
  *
  * The wrapper is used to position site content when the sidebar is toggled. We
- * use an outter wrap to position the sidebar without interferring with the
+ * use an outer wrap to position the sidebar without interferring with the
  * regular page content.
  */
 
 .wrap {
 	position: relative;
-	padding: 0 10px;
+	padding: 0 0;
 	width: 100%;
 }
 
@@ -244,8 +244,8 @@ img {
 	max-width: 100%;
 }
 .lightbox-trigger img {
-	height: 800px;
-	width: 800px;
+	height: 600px;
+	width: 600px;
 	object-fit: cover;
 }
 .lightbox-trigger span {
@@ -342,7 +342,7 @@ tbody tr:nth-child(odd) th {
  */
 
 .container {
-	max-width: 45rem;
+	max-width: 90%;
 	padding-left:  1rem;
 	padding-right: 1rem;
 	margin-left:  auto;
@@ -350,12 +350,12 @@ tbody tr:nth-child(odd) th {
 }
 @media (min-width: 38em) {
 	.container {
-		max-width: 32rem;
+		max-width: 95%;
 	}
 }
 @media (min-width: 56em) {
 	.container {
-		max-width: 45rem;
+		max-width: 90%;
 	}
 }
 
@@ -551,8 +551,8 @@ a.sidebar-nav-item:focus {
 }
 .wrap,
 .sidebar-toggle {
-	-webkit-transition: -webkit-transform .5s ease-in-out;
-    transition: transform .5s ease-in-out;
+	-webkit-transition: -webkit-transform .3s ease-in-out;
+    transition: transform .3s ease-in-out;
 }
 
 #sidebar-checkbox:checked + .sidebar {
@@ -575,12 +575,19 @@ a.sidebar-nav-item:focus {
  * page is wrapped in `.page` and is only used on the page layout.
  */
 
+.posts {
+	column-count: 3;
+}
+.post {
+	break-inside: avoid-column;
+	page-break-inside: avoid;
+}
 .page,
 .post {
 	margin-bottom: 4em;
 }
 
-/* Blog post or page title */
+/* Post or page title */
 .page-title,
 .post-title,
 .post-title a {
@@ -634,46 +641,52 @@ a.sidebar-nav-item:focus {
 
 .pagination {
 	overflow: hidden; /* clearfix */
-	margin-left: -1rem;
-	margin-right: -1rem;
 	font-family: "PT Sans", Helvetica, Arial, sans-serif;
 	color: #ccc;
-	text-align: center;
 }
 
 /* Pagination items can be `span`s or `a`s */
 .pagination-item {
+	background-color: #333;
 	font-size: 1.25rem;
 	display: block;
 	padding: 1rem;
 	border: 1px solid #eee;
+	border-radius: 25px;
+	transition: 0.6s;
 }
 .pagination-item:first-child {
 	margin-bottom: -1px;
+	float: left;
+}
+.pagination-item:last-child {
+	float: right;
+}
+.pagination-arrow {
+	max-width: 30%;
+	height: auto;
+	margin: auto;
+}
+a.pagination-item {
+	background-color: #666;
 }
 
 /* Only provide a hover state for linked pagination items */
 a.pagination-item:hover {
 	background-color: #f5f5f5;
+	box-shadow:0 20px 40px 0 rgba(0,0,0,0.2);
 }
 
 @media (min-width: 30em) {
 	.pagination {
-		margin: 3rem 
+		margin: 1rem 
 	}
 	.pagination-item {
-		float: left;
-		width: 40%;
+		width: 30%;
 	}
 	.pagination-item:first-child {
 		margin-bottom: 0;
-		border-top-left-radius:    4px;
-		border-bottom-left-radius: 4px;
-	}
-	.pagination-item:last-child {
-		margin-left: -1px;
-		border-top-right-radius:    4px;
-		border-bottom-right-radius: 4px;
+		margin-right: 10px;
 	}
 }
 
