@@ -158,4 +158,4 @@ echo "Post written successfully to $POSTFILE"
 git add $IMGDIR$FILE $POSTDIR$POSTFILE
 git commit -m "Added $NAME"
 
-echo "New files committed to central repository. Posting complete."
+echo "New files committed to repository. Posting complete. Don't forget to push to the cloud!"
