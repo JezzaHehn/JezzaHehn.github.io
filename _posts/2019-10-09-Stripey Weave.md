@@ -5,7 +5,7 @@ image:		Stripey Weave.png
 comment:	
 palette:	
 tags:		[mirrorlab]
-url:		https://signs.codes/system/media_attachments/files/000/205/559/original/bf3398de0c9da703.png
+social:		https://signs.codes/@jez/102934896210112224
 ---
 
 <span class="lightbox-trigger">

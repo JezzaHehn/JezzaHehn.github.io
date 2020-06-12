@@ -16,8 +16,11 @@ layout: default
   {% if page.comment != nil %}
     <p>{{ page.comment }}</p>
   {% endif %}
+  {% if page.social != nil %}
+    <p><a href="{{ page.social }}">Click here for the original post on social media.</a></p>
+  {% endif %}
   {% if page.palette != nil %}
-    <p>Created using <a href="{{ page.palette }}">this color palette</a></p>
+    <p>Created using <a href="{{ page.palette }}">this color palette</a>.</p>
   {% endif %}
   {{ content }}
 </div>

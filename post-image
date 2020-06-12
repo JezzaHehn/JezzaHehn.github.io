@@ -17,7 +17,9 @@ while test $# -gt 0; do
 			echo '-d, --date=DATE           Date of creation, e.g. "Jan 1", "next Friday"'
 			echo "-f, --file=FILE           Filename of the image"
 			echo "-n, --name=NAME           Title of the image (and the post)"
+			echo "-p, --palette=URL         Color palette URL if applicable"
 			echo "-t, --tags=TAGS           Comma-separated list of software tags"
+			echo "-u, --url=URL             Social media URL if applicable"
 			exit 0
 			;;
 		-c)
@@ -73,7 +75,21 @@ while test $# -gt 0; do
 			shift
 			;;
 		--name*)
-			PROCESS=`echo $1 | sed -e 's/^[^=]*=//g'`
+			NAME=`echo $1 | sed -e 's/^[^=]*=//g'`
+			shift
+			;;
+		-p)
+			shift
+			if test $# -gt 0; then
+				PALETTE=$1
+			else
+				echo "No palette URL specified"
+				exit 1
+			fi
+			shift
+			;;
+		--palette*)
+			PALETTE=`echo $1 | sed -e 's/^[^=]*=//g'`
 			shift
 			;;
 		-t)
@@ -87,7 +103,21 @@ while test $# -gt 0; do
 			shift
 			;;
 		--tags*)
-			PROCESS=`echo $1 | sed -e 's/^[^=]*=//g'`
+			TAGS=`echo $1 | sed -e 's/^[^=]*=//g'`
+			shift
+			;;
+		-u)
+			shift
+			if test $# -gt 0; then
+				URL=$1
+			else
+				echo "No URL specified"
+				exit 1
+			fi
+			shift
+			;;
+		--tags*)
+		    URL=`echo $1 | sed -e 's/^[^=]*=//g'`
 			shift
 			;;
 		*)
@@ -145,7 +175,9 @@ layout:		post
 title:		$NAME
 image:		$FILENAME
 comment:	$COMMENT
+palette:	$PALETTE
 tags:		[$TAGS]
+social:		$URL
 ---
 
 <span class="lightbox-trigger">
