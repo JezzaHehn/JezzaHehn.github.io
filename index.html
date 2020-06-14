@@ -18,11 +18,11 @@ title: Welcome
         </a>
       </h1>
 	  <span class="post-tags">
-		[
-		{% for tag in post.tags %}
-		  {% capture tag_name %}{{ tag }}{% endcapture %}
-		  <a href="/tag/{{ tag_name }}"><nobr>{{ tag_name }}</nobr></a>
-		{% endfor %}
+		[&nbsp;
+		  {% for tag in post.tags %}
+		    {% capture tag_name %}{{ tag }}{% endcapture %}
+		    <a href="/tag/{{ tag_name }}"><nobr>{{ tag_name }}</nobr></a>&nbsp;
+		  {% endfor %}
 		]
 	  </span> — <a href="{{ post.url | absolute_url }}">More info</a>
 	  <span class="post-date">{{ post.date | date_to_string }}</span>

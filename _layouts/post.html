@@ -5,10 +5,10 @@ layout: default
 <div class="post">
   <h1 class="post-title">{{ page.title }}</h1>
   <span>
-	[
+	[&nbsp;
 	{% for tag in page.tags %}
       {% capture tag_name %}{{ tag }}{% endcapture %}
-      <a href="/tag/{{ tag_name }}"><nobr>{{ tag_name }}</nobr>&nbsp;</a>
+      <a href="/tag/{{ tag_name }}"><nobr>{{ tag_name }}</nobr></a>&nbsp;
 	{% endfor %}
 	]
   </span>
@@ -17,10 +17,10 @@ layout: default
     <p>{{ page.comment }}</p>
   {% endif %}
   {% if page.social != nil %}
-    <p><a href="{{ page.social }}">Click here for the original post on social media.</a></p>
+    <p><a target="_blank" rel="noopener noreferrer" href="{{ page.social }}">Click here for the original post on social media.</a></p>
   {% endif %}
   {% if page.palette != nil %}
-    <p>Created using <a href="{{ page.palette }}">this color palette</a>.</p>
+    <p>Created using <a target="_blank" rel="noopener noreferrer" href="{{ page.palette }}">this color palette</a>.</p>
   {% endif %}
   {{ content }}
 </div>
