@@ -4,7 +4,7 @@ title:		Black Lives Matter - Pride 2020
 image:		Black Lives Matter - Pride 2020.png
 comment:	Please contribute to the movement by donating to a civil rights charity. Together, we can create positive change and build a safer world for everyone.
 palette:	
-tags:		[gimp]
+tags:		[gnu-imp]
 social:		
 ---
 
