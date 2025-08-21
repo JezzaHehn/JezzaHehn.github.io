@@ -4,6 +4,13 @@
   <meta charset="utf-8"/>
   <title>Yjs Dice — Single Room</title>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta http-equiv="Content-Security-Policy"
+      content="default-src 'self';
+               script-src 'self' https:;
+               style-src 'self' 'unsafe-inline' https:;
+               img-src 'self' data: https:;
+               connect-src 'self' https: wss:;
+               frame-ancestors 'self';">
   <style>
     :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
     body { max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
@@ -57,17 +64,18 @@
 
   <!-- Yjs + y-webrtc via CDN -->
   <script type="module">
-    import * as Y from "https://cdn.jsdelivr.net/npm/yjs@13.6.18/dist/yjs.mjs";
-    import { WebrtcProvider } from "https://cdn.jsdelivr.net/npm/y-webrtc@10.3.0/dist/y-webrtc.mjs";
+    import * as Y from "https://esm.sh/yjs@13.6.18";
+    import { WebsocketProvider } from "https://esm.sh/y-websocket@1.5.4";
 
     // ---- Room + doc ----
     const ROOM_ID = "global-yjs-dice-demo-v1"; // change to split rooms if you ever need to
     const doc = new Y.Doc();
     const state = doc.getMap("state"); // { die, roller, ts }
-    const awareness = new WebrtcProvider(ROOM_ID, doc, {
-      // y-webrtc ships with default public signaling servers; we can add more:
-      // signaling: ['wss://signaling.yjs.dev', 'wss://y-webrtc-signaler.herokuapp.com'] // example
-    });
+    const awareness = new WebsocketProvider(
+      "wss://demos.yjs.dev",  // public demo server
+      ROOM_ID,
+      doc
+    );
 
     const provider = awareness; // alias
 
