@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <title>Yjs Dice — Single Room</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <style>
+    :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    body { max-width: 720px; margin: 2rem auto; padding: 0 1rem; }
+    header { display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem; }
+    .card { border:1px solid #ddd; border-radius:12px; padding:1rem; margin:.75rem 0; }
+    .row { display:flex; gap:.5rem; align-items:center; flex-wrap:wrap; }
+    button { padding:.55rem .9rem; border-radius:10px; border:1px solid #bbb; cursor:pointer; }
+    input { padding:.5rem; border-radius:8px; border:1px solid #bbb; }
+    .die { font-size: 5rem; line-height: 1; margin: .5rem 0; }
+    .muted { color:#666; }
+    .ok { color: #117733; }
+    .warn { color: #a66b00; }
+    .err { color: #b00020; }
+    .pill { padding:.2rem .5rem; border-radius:999px; background:#eee; font-size:.85rem; }
+    .me { background:#f7fff2; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>🎲 Yjs Dice (Global Room)</h1>
+    <div id="conn" class="pill muted">connecting…</div>
+  </header>
+
+  <section class="card">
+    <div class="row">
+      <label for="name">Display name:</label>
+      <input id="name" placeholder="Pick a name" />
+      <button id="saveName">Set</button>
+      <span id="you" class="pill me"></span>
+    </div>
+    <div class="muted" id="peers">Peers online: 0</div>
+  </section>
+
+  <section class="card">
+    <div class="row">
+      <button id="roll">Roll shared die</button>
+      <span class="muted">Everyone sees the same result.</span>
+    </div>
+    <div class="die" id="die">–</div>
+    <div class="muted" id="meta"></div>
+  </section>
+
+  <section class="card">
+    <details>
+      <summary>How it works</summary>
+      <p>This page uses <code>Yjs</code> (CRDT) + <code>y-webrtc</code> to sync a tiny shared state:
+        <code>{ die, roller, ts }</code>. Awareness tracks who’s online and their names.</p>
+      <p>No server, no database, no auth. It’s peer-to-peer via public signaling for discovery.</p>
+    </details>
+  </section>
+
+  <!-- Yjs + y-webrtc via CDN -->
+  <script type="module">
+    import * as Y from "https://cdn.jsdelivr.net/npm/yjs@13.6.18/dist/yjs.mjs";
+    import { WebrtcProvider } from "https://cdn.jsdelivr.net/npm/y-webrtc@10.3.0/dist/y-webrtc.mjs";
+
+    // ---- Room + doc ----
+    const ROOM_ID = "global-yjs-dice-demo-v1"; // change to split rooms if you ever need to
+    const doc = new Y.Doc();
+    const state = doc.getMap("state"); // { die, roller, ts }
+    const awareness = new WebrtcProvider(ROOM_ID, doc, {
+      // y-webrtc ships with default public signaling servers; we can add more:
+      // signaling: ['wss://signaling.yjs.dev', 'wss://y-webrtc-signaler.herokuapp.com'] // example
+    });
+
+    const provider = awareness; // alias
+
+    // ---- Elements ----
+    const $ = (s) => document.querySelector(s);
+    const $die = $("#die");
+    const $meta = $("#meta");
+    const $name = $("#name");
+    const $saveName = $("#saveName");
+    const $you = $("#you");
+    const $peers = $("#peers");
+    const $conn = $("#conn");
+    const $roll = $("#roll");
+
+    // ---- Helpers ----
+    const d6 = () => (crypto.getRandomValues(new Uint32Array(1))[0] % 6) + 1;
+    const fmtTime = (t) => new Date(t).toLocaleTimeString();
+
+    // ---- Awareness: name + presence ----
+    // Set our local awareness state
+    function setLocalName(name) {
+      provider.awareness.setLocalStateField("user", { name });
+      localStorage.setItem("yjs-dice-name", name);
+      $you.textContent = name ? `You: ${name}` : `You: (anonymous)`;
+    }
+
+    // Load name from storage or auto-generate
+    const saved = localStorage.getItem("yjs-dice-name");
+    const autod = "Guest-" + Math.random().toString(36).slice(2, 6);
+    setLocalName(saved || autod);
+    $name.value = saved || "";
+
+    $saveName.addEventListener("click", () => {
+      setLocalName($name.value.trim() || autod);
+    });
+
+    // Update peers count on awareness changes
+    const updatePeers = () => {
+      const states = Array.from(provider.awareness.getStates().values());
+      const names = states.map(s => s?.user?.name || "anonymous");
+      $peers.textContent = `Peers online: ${names.length} — ${names.join(", ")}`;
+    };
+    provider.awareness.on("change", updatePeers);
+    updatePeers();
+
+    // ---- Connection status ----
+    function setConnStatus() {
+      const conns = provider.webrtcConns ? provider.webrtcConns.size : 0;
+      if (conns > 0) {
+        $conn.textContent = `connected (${conns} peer${conns>1?"s":""})`;
+        $conn.className = "pill ok";
+      } else {
+        $conn.textContent = "discovering peers…";
+        $conn.className = "pill warn";
+      }
+    }
+    setInterval(setConnStatus, 1000);
+    setConnStatus();
+
+    // ---- Shared state rendering ----
+    function render() {
+      const die = state.get("die");
+      const roller = state.get("roller");
+      const ts = state.get("ts");
+      $die.textContent = die ?? "–";
+      if (die != null) {
+        $meta.textContent = `Rolled by ${roller || "someone"} at ${fmtTime(ts)}.`;
+      } else {
+        $meta.textContent = `Click “Roll shared die” to start.`;
+      }
+    }
+    render();
+
+    // Re-render on Y.Map changes
+    state.observe(render);
+
+    // ---- Roll action (anyone can roll) ----
+    $roll.addEventListener("click", () => {
+      const die = d6();
+      const me = provider.awareness.getLocalState()?.user?.name || "anonymous";
+      doc.transact(() => {
+        state.set("die", die);
+        state.set("roller", me);
+        state.set("ts", Date.now());
+      });
+    });
+
+    // ---- Initialize default if empty (first joiner) ----
+    if (!state.has("die")) {
+      doc.transact(() => {
+        state.set("die", null);
+        state.set("roller", null);
+        state.set("ts", Date.now());
+      });
+    }
+  </script>
+</body>
+</html>
